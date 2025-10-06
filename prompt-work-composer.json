@@ -23,13 +23,13 @@
       "prompt10": "gpt-5-nano"
     },
     "fallback_order": ["gpt-5-mini", "gpt-5-nano"],  
-    "timeouts_ms": { "default": 20000, "long": 30000 }
+    "timeouts_ms": { "default": 30000, "long": 45000 }
   },
 
   "gen_params": {
-    "default":   { "temperature": 0.3, "top_p": 0.9, "max_output_tokens": 1200 },
-    "html_heavy":{ "temperature": 0.2, "top_p": 0.9, "max_output_tokens": 2000 }, 
-    "poster":    { "temperature": 0.35,"top_p": 0.9, "max_output_tokens": 800 }    
+    "default":   { "temperature": 0.3, "top_p": 0.9, "max_output_tokens": 1700 },
+    "html_heavy":{ "temperature": 0.2, "top_p": 0.9, "max_output_tokens": 3500 }, 
+    "poster":    { "temperature": 0.35,"top_p": 0.9, "max_output_tokens": 900 }    
   },
 
   "prompt": "STYLE (global): ภาษาไทยสุภาพ อ่านง่าย เรียบ สะอาด เหมาะกับพนักงานโรงงาน • หลีกเลี่ยงอีโมจิ/สัญลักษณ์เกินจำเป็น • ใช้หน่วยไทย • ชื่อขั้นตอนสั้น ชัด • ถ้าไม่แน่ใจให้เว้นว่างแทนการเดา • ห้ามใส่อะไรนอกเหนือจากรูปแบบเอาต์พุตที่กำหนด (JSON/สตริง) • ถ้าไม่สามารถทำตามรูปแบบ ให้ส่งค่าเว้นว่างตามสคีมาแทน",
