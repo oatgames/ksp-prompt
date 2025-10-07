@@ -10,21 +10,28 @@
   "use_poster": true,
 
   "routing": {
-    "prompt_models": {
-      "prompt1":  "gpt-5-nano",
-      "prompt2":  "gpt-5-mini",
-      "prompt3":  "gpt-5-mini",
-      "prompt4":  "gpt-5-nano",
-      "prompt5":  "gpt-5-nano",
-      "prompt6":  "gpt-5-nano",
-      "prompt7":  "gpt-5-nano",
-      "prompt8":  "gpt-5-nano",
-      "prompt9":  "gpt-5-nano",
-      "prompt10": "gpt-5-nano"
-    },
-    "fallback_order": ["gpt-5-mini", "gpt-5-nano"],  
-    "timeouts_ms": { "default": 30000, "long": 45000 }
+  "prompt_models": {
+    "prompt1":  "gpt-5-nano",
+    "prompt2":  "gpt-5-mini",
+    "prompt3":  "gpt-5-mini",
+    "prompt4":  "gpt-5-nano",
+    "prompt5":  "gpt-5-nano",
+    "prompt6":  "gpt-5-nano",
+    "prompt7":  "gpt-5-nano",
+    "prompt8":  "gpt-5-nano",
+    "prompt9":  "gpt-5-nano",
+    "prompt10": "gpt-5-nano"
   },
+  "fallback_order": [
+    "gpt-5-mini",
+    "gpt-5-nano",
+
+    "gpt-4o-mini",   
+    "gpt-4.1-mini",  
+    "gpt-4o"         
+  ],
+  "timeouts_ms": { "default": 30000, "long": 45000 }
+},
 
   "gen_params": {
     "default":   { "temperature": 0.3, "top_p": 0.9, "max_output_tokens": 1700 },
@@ -37,7 +44,7 @@
   "prompts": {
     "prompt1": "role: ผู้ช่วยจัดเรียงข้อมูล | goal: รวม/จัดลำดับ items ให้เป็นขั้นตอนเข้าใจง่าย | context: items จากฟอร์มอาจยาว/สั้น รูปมาก/น้อย ปะปนกัน | instruction: 1) รวมข้อความซ้ำหรือใกล้กัน 2) ตัดคำฟุ้ง/ซ้ำซ้อน 3) เรียงตามลำดับการทำงาน 4) ถ้าไม่มีรูปให้ตั้ง images=[] 5) จำกัด text ต่อขั้นตอน ≤ 120 คำ 6) ห้ามสร้างข้อมูลเท็จ 7) จำนวนขั้นตอนไม่เกิน 20 | output_format: ส่งเป็น JSON เท่านั้น โดยโครงสร้าง: { \"items\": [{\"stepNo\":1, \"title\":\"…\", \"text\":\"…\", \"images\":[\"url1\", \"url2\"] }], \"caption\": \"<= 90 ตัวอักษร\" } | tone: เรียบง่ายและเป็นมิตร",
 
-    "prompt2": "role: นักออกแบบรายงาน | goal: ผลิต pagesHTML ขนาด A4 สำหรับพรีวิว/พิมพ์ | context: ระบบจะจัด margin เอง 1cm และมี CSS ภายใน | instruction: สร้าง HTML ที่ปลอดภัยและ semantic โดยใช้เฉพาะแท็ก <div><section><header><footer><h1><h2><h3><p><ul><li><figure><img><figcaption> • ห้ามใช้ <script>, inline style, on* attributes • ใส่เฉพาะ class เช่น a4-page, a4-section, a4-header, a4-footer • โครงสร้าง: 1) header ชื่อรายงาน+วันที่ 2) section ต่อขั้นตอน (หัวข้อ+ย่อหน้า+รูปถ้ามี) 3) footer ผู้บันทึก • ถ้าไม่มีรูป ให้ข้าม <img> | output_format: สตริง HTML เดียว (ไม่ห่อด้วย JSON) | note: ต้องส่งเป็นเอกสาร HTML เดียวที่ปลอดภัยเท่านั้น",
+    "prompt2": "role: นักออกแบบรายงาน | goal: ผลิต pagesHTML ขนาด A4 สำหรับพรีวิว/พิมพ์ | context: ระบบมี CSS ภายในและจะจัด margin เอง (1cm) | constraints: ปลอดภัย/ไม่มีสคริปต์ | instruction: \n- สร้างเนื้อหาเป็น HTML ที่เรียบ สะอาด และ semantic\n- ใช้เฉพาะแท็ก: <div> <section> <header> <footer> <h1> <h2> <h3> <p> <ul> <li> <figure> <img> <figcaption>\n- อนุญาตเฉพาะแอตทริบิวต์ class และ src (เฉพาะ <img>) ห้าม inline style, ห้าม on* attributes, ห้าม <script>\n- โครงสร้างต่อ “หน้า” ต้องห่อด้วย <div class=\"a4-page\"> … </div>\n  ภายในแนะนำ:\n  <header class=\"a4-header\"> ชื่อรายงาน + วันที่ </header>\n  <section class=\"a4-section\"> สำหรับแต่ละขั้นตอน: <h2 class=\"a4-step-title\">, <p class=\"a4-step-text\">, และถ้ามีรูปใช้ <figure class=\"a4-figure\"><img src=\"...\"><figcaption>...</figcaption></figure> (ถ้าไม่มีรูป ให้ละเว้นทั้ง <figure> และ <img>)\n  <footer class=\"a4-footer\"> ผู้บันทึก/หมายเหตุสั้น </footer>\n- เขียนหัวข้อสั้น ชัด ย่อหน้าอ่านง่าย หลีกเลี่ยงคำฟุ่มเฟือย\n- ถ้าเนื้อหาไม่ยาว ให้รวมเป็น 1 หน้า; ถ้ายาวมากค่อยแบ่งเป็นหลายหน้า (แต่ละรายการใน pagesHTML คือ 1 หน้า)\noutput_format: ส่งเป็น JSON เท่านั้น และต้องไม่มีข้อความอื่นประกบ | schema: { \"pagesHTML\": [\"<div class='a4-page'>…</div>\", \"<div class='a4-page'>…</div>\"] } | note: ห้ามลิงก์ภายนอก, ห้าม iframe/script/style, รูปใช้เฉพาะ URL ที่ได้รับมาเท่านั้น",
     
     "prompt3": "role: นักออกแบบโปสเตอร์ | goal: วาง posterSpec สำหรับ renderer | context: โพสต์ใช้โซเชียล แนว minimal/readable/negative space | instruction: สร้างสเปก 4:5 (1080x1350) รองรับ type: rect/text/image • เลี่ยงข้อความยาว • title ≤ 60 ตัวอักษร, subtitle/caption ≤ 90 • ถ้าไม่มีรูป ให้ละเว้น element image | output_format: JSON: { \"background\":\"#ffffff\", \"size\":{\"w\":1080,\"h\":1350}, \"elements\":[ {\"type\":\"rect\",\"x\":0,\"y\":0,\"w\":1080,\"h\":140,\"fill\":\"#111827\"}, {\"type\":\"text\",\"text\":\"หัวเรื่อง\",\"x\":36,\"y\":180,\"font\":\"bold 64px system-ui\",\"color\":\"#111827\",\"maxWidth\":1008,\"maxLines\":2} ] }",
 
